@@ -1,11 +1,9 @@
 'use client'
 
-import { type HSLColor } from 'react-color'
-
 import { createContext, useState, useContext } from 'react';
 
 const usePrimaryColourState = () => {
-  return useState<string>('');
+  return useState<string>('#44833E');
 }
 export const PrimaryColourContext = createContext<ReturnType<typeof usePrimaryColourState> | null>(null);
 

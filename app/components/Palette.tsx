@@ -11,15 +11,19 @@ export default function Palette() {
 
 
   return (
-    <div className="w-full mt-8 grid grid-cols-9 gap-8 ">
-      {
-        colours.map((colour, index) => (
-          <div key={index} className="w-full aspect-square rounded-2xl" style={{backgroundColor: colour}}>
+    <div className="w-full mt-16">
+      <h2 className="text-xl font-bold">Generated Palette</h2>
+      <div className="grid grid-cols-9 gap-8 mt-2">
+        {
+          colours.map((colour, index) => (
+            <div key={index} className="w-full aspect-square rounded-2xl" style={{backgroundColor: colour}}>
 
-          </div>
-        ))
-      }
+            </div>
+          ))
+        }
+      </div>
     </div>
+    
   );
 }
 
