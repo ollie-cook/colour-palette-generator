@@ -14,23 +14,27 @@ export default function Palette() {
       <h2 className="text-xl font-bold">Generated Palette</h2>
       <div className="grid grid-cols-9 gap-8 mt-2">
         {
-          colours.map((colour, index) => (
-            <div className="w-full flex flex-col items-center">
-              <div key={index} className="w-full aspect-square rounded-2xl" style={{backgroundColor: colour.hsl}}></div>
-              <div className="flex w-full justify-between p-1 mt-2 rounded-md bg-zinc-200">
-                <p className="font-bold text-sm">{colour.hex}</p>
-                <button onClick={() => navigator.clipboard.writeText(colour.hex)}>
-                  <MdContentCopy />
-                </button>
+          colours.map((colour, index) => {
+            const guid = crypto.randomUUID()
+
+            return (
+              <div key={guid} className="w-full flex flex-col items-center">
+                <div key={index} className="w-full aspect-square rounded-2xl" style={{backgroundColor: colour.hsl}}></div>
+                <div className="flex w-full justify-between p-1 mt-2 rounded-md bg-zinc-200">
+                  <p className="font-bold text-sm">{colour.hex}</p>
+                  <button onClick={() => navigator.clipboard.writeText(colour.hex)}>
+                    <MdContentCopy />
+                  </button>
+                </div>
+                <div className="flex w-full justify-between p-1 mt-2 rounded-md bg-zinc-200">
+                  <p className="font-bold text-sm">{colour.hsl}</p>
+                  <button onClick={() => navigator.clipboard.writeText(colour.hsl)}>
+                    <MdContentCopy />
+                  </button>
+                </div>  
               </div>
-              <div className="flex w-full justify-between p-1 mt-2 rounded-md bg-zinc-200">
-                <p className="font-bold text-sm">{colour.hsl}</p>
-                <button onClick={() => navigator.clipboard.writeText(colour.hsl)}>
-                  <MdContentCopy />
-                </button>
-              </div>  
-            </div>
-          ))
+            )
+          })
         }
       </div>
     </div>
