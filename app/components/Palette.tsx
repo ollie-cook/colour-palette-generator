@@ -1,14 +1,13 @@
 'use client'
 
 import { usePrimaryColour } from './PrimaryColourContext'
-import hexToHSL, {hexToHSLArray} from '@/app/utils/functions.js'
+import {hexToHSLArray, HSLToHex} from '@/app/utils/functions.js'
+import { MdContentCopy } from "react-icons/md";
 
 export default function Palette() {
   const [primaryColour] = usePrimaryColour()
 
   const colours = generateColours(primaryColour)
-
-
 
   return (
     <div className="w-full mt-16">
@@ -16,8 +15,20 @@ export default function Palette() {
       <div className="grid grid-cols-9 gap-8 mt-2">
         {
           colours.map((colour, index) => (
-            <div key={index} className="w-full aspect-square rounded-2xl" style={{backgroundColor: colour}}>
-
+            <div className="w-full flex flex-col items-center">
+              <div key={index} className="w-full aspect-square rounded-2xl" style={{backgroundColor: colour.hsl}}></div>
+              <div className="flex w-full justify-between p-1 mt-2 rounded-md bg-zinc-200">
+                <p className="font-bold text-sm">{colour.hex}</p>
+                <button onClick={() => navigator.clipboard.writeText(colour.hex)}>
+                  <MdContentCopy />
+                </button>
+              </div>
+              <div className="flex w-full justify-between p-1 mt-2 rounded-md bg-zinc-200">
+                <p className="font-bold text-sm">{colour.hsl}</p>
+                <button onClick={() => navigator.clipboard.writeText(colour.hsl)}>
+                  <MdContentCopy />
+                </button>
+              </div>  
             </div>
           ))
         }
@@ -27,8 +38,10 @@ export default function Palette() {
   );
 }
 
-const generateColours = (primaryColour: string) : string[] => {
+const generateColours = (primaryColour: string) : {hex: string, hsl: string}[] => {
   const colourStrings: string[] = Array(9).fill("");
+
+  const hexAndHSL: {hex: string, hsl: string}[] = Array(9).fill({hex: "", hsl: ""});
 
   const primaryHSLObject = hexToHSLArray(primaryColour);
 
@@ -37,32 +50,30 @@ const generateColours = (primaryColour: string) : string[] => {
 
   const firstLight = primaryHSLObject.l / 5;
   for (let i=0; i<4; i++) {
-    coloursHSL[i].l = firstLight * (i+1)
+    coloursHSL[i].l = parseFloat((firstLight*(i+1)).toFixed(0))
   }
 
   const lightDiff = (100 - primaryHSLObject.l) / 5
-  console.log(lightDiff)
   for (let i=5; i<9; i++) {
-    coloursHSL[i].l = primaryHSLObject.l + lightDiff * (i-4)
+    coloursHSL[i].l = parseFloat((primaryHSLObject.l+lightDiff*(i-4)).toFixed(0))
   }
 
   coloursHSL.forEach((colour, index) => {
     const saturation = calculateSaturation(colour.l, primaryHSLObject.l, primaryHSLObject.s)
     colour.s = saturation
 
-    colourStrings[index] = `hsl(${colour.h}, ${colour.s}%, ${colour.l}%)`
+    const hexString = HSLToHex(colour.h, colour.s, colour.l)
+    const HSLString = `hsl(${colour.h}, ${colour.s}%, ${colour.l}%)`
+    hexAndHSL[index] = {hex: hexString, hsl: HSLString}
   })
 
-  console.log(coloursHSL)
-
-
-  return colourStrings
+  return hexAndHSL
 }
 
 const calculateSaturation = (light: number, primaryLight: number, primarySaturation: number) => {
   const a = (primarySaturation - 100) / (primaryLight*primaryLight - 100*primaryLight);
 
-  const saturation = a*light*light -100*a*light + 100;
+  const saturation = parseFloat((a*light*light -100*a*light + 100).toFixed(0));
 
   return saturation
 }
