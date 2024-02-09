@@ -10,9 +10,9 @@ export default function Palette() {
   const colours = generateColours(primaryColour)
 
   return (
-    <div className="w-full mt-16">
+    <div className="w-full my-16 ">
       <h2 className="text-xl font-bold">Generated Palette</h2>
-      <div className="grid grid-cols-9 gap-8 mt-2">
+      <div className="grid grid-cols-3 lg:grid-cols-9 gap-8 mt-2">
         {
           colours.map((colour, index) => {
             const guid = crypto.randomUUID()
