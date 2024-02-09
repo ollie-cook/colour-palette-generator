@@ -1,5 +1,7 @@
 'use client'
 
+import { type HSLColor } from 'react-color'
+
 import { createContext, useState, useContext } from 'react';
 
 const usePrimaryColourState = () => {
